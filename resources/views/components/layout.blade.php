@@ -1,0 +1,200 @@
+@props(['title' => config('app.name')])
+
+@php
+    $seccionActiva = match(true) {
+        request()->routeIs('areas.*', 'componentes.*', 'lineas.*', 'tipo-actividad.*') => 'servicios',
+        request()->routeIs('academico.*') => 'academico',
+        request()->routeIs('usuarios.*')  => 'usuarios',
+        default => null,
+    };
+@endphp
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ $title }} | {{ config('app.name') }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        :root { --sibi-green: #196844; }
+
+        /* ── Top navbar ── */
+        .navbar-top {
+            background-color: var(--sibi-green);
+        }
+        .navbar-top .nav-link {
+            color: rgba(255,255,255,.8);
+            font-weight: 500;
+            padding: .5rem 1.2rem;
+            border-radius: .375rem;
+            transition: background .15s, color .15s;
+        }
+        .navbar-top .nav-link:hover,
+        .navbar-top .nav-link.active {
+            background: rgba(255,255,255,.15);
+            color: #fff;
+        }
+        .navbar-top .navbar-brand {
+            color: #fff;
+            font-weight: 700;
+            letter-spacing: .5px;
+        }
+
+        /* ── Sidebar ── */
+        #sidebar {
+            width: 230px;
+            min-width: 230px;
+            min-height: calc(100vh - 56px);
+            background: #fff;
+            border-right: 1px solid #e5e7eb;
+        }
+        .sidebar-heading {
+            font-size: .7rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: #9ca3af;
+            padding: 1.25rem 1rem .4rem;
+        }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: .55rem;
+            padding: .5rem 1rem;
+            color: #374151;
+            text-decoration: none;
+            font-size: .9rem;
+            border-radius: .375rem;
+            margin: 1px .5rem;
+            transition: background .15s, color .15s;
+        }
+        .sidebar-link:hover {
+            background: #f3f4f6;
+            color: var(--sibi-green);
+        }
+        .sidebar-link.active {
+            background: #e6f2ec;
+            color: var(--sibi-green);
+            font-weight: 600;
+        }
+        .sidebar-link .bi {
+            font-size: 1rem;
+            opacity: .75;
+        }
+        .sidebar-link.active .bi {
+            opacity: 1;
+        }
+
+        /* ── Layout body ── */
+        #page-wrapper {
+            display: flex;
+            min-height: calc(100vh - 56px);
+        }
+        #main-content {
+            flex: 1;
+            padding: 1.75rem;
+            background: #f8f9fa;
+            overflow-x: hidden;
+        }
+
+        /* ── Tree colors ── */
+        .tree { --indent: 1.4rem; }
+        .tree-area  { border-left: 3px solid #196844; }
+        .tree-comp  { border-left: 3px solid #6f42c1; margin-left: var(--indent); }
+        .tree-linea { border-left: 3px solid #20c997; margin-left: calc(var(--indent) * 2); }
+    </style>
+</head>
+<body class="bg-light">
+
+{{-- ═══════════════════ TOP NAVBAR ═══════════════════ --}}
+<nav class="navbar navbar-top navbar-expand-lg px-3" style="height:56px">
+    <a class="navbar-brand me-4" href="/">SIBI</a>
+
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#topMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-center" id="topMenu">
+        <ul class="navbar-nav gap-1">
+            <li class="nav-item">
+                <a class="nav-link {{ $seccionActiva === 'servicios' ? 'active' : '' }}"
+                   href="{{ route('areas.index') }}">
+                    <i class="bi bi-heart-pulse me-1"></i>Servicios
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ $seccionActiva === 'academico' ? 'active' : '' }}"
+                   href="#">
+                    <i class="bi bi-mortarboard me-1"></i>Académico
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ $seccionActiva === 'usuarios' ? 'active' : '' }}"
+                   href="#">
+                    <i class="bi bi-people me-1"></i>Usuarios
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+{{-- ═══════════════════ BODY: SIDEBAR + CONTENT ═══════════════════ --}}
+<div id="page-wrapper">
+
+    {{-- ── Sidebar ── --}}
+    <aside id="sidebar">
+
+        @if($seccionActiva === 'servicios')
+            <p class="sidebar-heading">Servicios</p>
+
+            <a href="{{ route('areas.index') }}"
+               class="sidebar-link {{ request()->routeIs('areas.*') ? 'active' : '' }}">
+                <i class="bi bi-diagram-3-fill"></i> Áreas
+            </a>
+            <a href="{{ route('componentes.index') }}"
+               class="sidebar-link {{ request()->routeIs('componentes.*') ? 'active' : '' }}">
+                <i class="bi bi-collection-fill"></i> Componentes
+            </a>
+            <a href="{{ route('lineas.index') }}"
+               class="sidebar-link {{ request()->routeIs('lineas.*') ? 'active' : '' }}">
+                <i class="bi bi-list-ul"></i> Líneas
+            </a>
+            <a href="{{ route('tipo-actividad.index') }}"
+               class="sidebar-link {{ request()->routeIs('tipo-actividad.*') ? 'active' : '' }}">
+                <i class="bi bi-tags-fill"></i> Tipos de Actividad
+            </a>
+
+        @elseif($seccionActiva === 'academico')
+            <p class="sidebar-heading">Académico</p>
+            <span class="sidebar-link text-muted">Próximamente...</span>
+
+        @elseif($seccionActiva === 'usuarios')
+            <p class="sidebar-heading">Usuarios</p>
+            <span class="sidebar-link text-muted">Próximamente...</span>
+
+        @else
+            <p class="sidebar-heading">Menú</p>
+            <span class="sidebar-link text-muted">Selecciona una sección.</span>
+        @endif
+
+    </aside>
+
+    {{-- ── Main content ── --}}
+    <main id="main-content">
+        @if(session('success'))
+            <x-alert type="success" :message="session('success')" />
+        @endif
+        @if(session('error'))
+            <x-alert type="danger" :message="session('error')" />
+        @endif
+
+        {{ $slot }}
+    </main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

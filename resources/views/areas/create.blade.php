@@ -1,0 +1,23 @@
+<x-layout title="Nueva Área">
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <x-card title="<i class='bi bi-plus-circle me-2'></i>Nueva Área" color="primary">
+                <form action="{{ route('areas.store') }}" method="POST">
+                    @csrf
+
+                    <x-form.input
+                        name="nombre"
+                        label="Nombre"
+                        placeholder="Ej: Ciencias Básicas"
+                        :maxlength="150"
+                        autofocus
+                    />
+
+                    <x-form.actions :back="route('areas.index')" label="Guardar" />
+                </form>
+            </x-card>
+        </div>
+    </div>
+
+</x-layout>
