@@ -3,7 +3,7 @@
 @php
     $seccionActiva = match(true) {
         request()->routeIs('areas.*', 'componentes.*', 'lineas.*', 'tipo-actividad.*') => 'servicios',
-        request()->routeIs('academico.*') => 'academico',
+        request()->routeIs('sedes.*', 'facultades.*') => 'academico',
         request()->routeIs('usuarios.*')  => 'usuarios',
         default => null,
     };
@@ -126,7 +126,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ $seccionActiva === 'academico' ? 'active' : '' }}"
-                   href="#">
+                   href="{{ route('sedes.index') }}">
                     <i class="bi bi-mortarboard me-1"></i>Académico
                 </a>
             </li>
@@ -168,7 +168,14 @@
 
         @elseif($seccionActiva === 'academico')
             <p class="sidebar-heading">Académico</p>
-            <span class="sidebar-link text-muted">Próximamente...</span>
+            <a href="{{ route('sedes.index') }}"
+               class="sidebar-link {{ request()->routeIs('sedes.*') ? 'active' : '' }}">
+                <i class="bi bi-geo-alt-fill"></i> Sedes
+            </a>
+            <a href="{{ route('facultades.index') }}"
+               class="sidebar-link {{ request()->routeIs('facultades.*') ? 'active' : '' }}">
+                <i class="bi bi-building"></i> Facultades
+            </a>
 
         @elseif($seccionActiva === 'usuarios')
             <p class="sidebar-heading">Usuarios</p>
