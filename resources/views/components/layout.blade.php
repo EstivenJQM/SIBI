@@ -2,8 +2,9 @@
 
 @php
     $seccionActiva = match(true) {
-        request()->routeIs('areas.*', 'componentes.*', 'lineas.*', 'tipo-actividad.*') => 'servicios',
-        request()->routeIs('sedes.*', 'facultades.*') => 'academico',
+        request()->routeIs('areas.*', 'componentes.*', 'lineas.*', 'tipo-actividad.*') => 'caracterizacion',
+        request()->routeIs('sedes.*', 'facultades.*', 'programas.*') => 'academico',
+        request()->routeIs('servicios.*', 'periodos.*') => 'servicios',
         request()->routeIs('usuarios.*')  => 'usuarios',
         default => null,
     };
@@ -119,9 +120,15 @@
     <div class="collapse navbar-collapse justify-content-center" id="topMenu">
         <ul class="navbar-nav gap-1">
             <li class="nav-item">
-                <a class="nav-link {{ $seccionActiva === 'servicios' ? 'active' : '' }}"
+                <a class="nav-link {{ $seccionActiva === 'caracterizacion' ? 'active' : '' }}"
                    href="{{ route('areas.index') }}">
-                    <i class="bi bi-heart-pulse me-1"></i>Servicios
+                    <i class="bi bi-puzzle-fill me-1"></i>Caracterización
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ $seccionActiva === 'servicios' ? 'active' : '' }}"
+                   href="{{ route('servicios.index') }}">
+                    <i class="bi bi-clipboard2-check-fill me-1"></i>Servicios
                 </a>
             </li>
             <li class="nav-item">
@@ -146,8 +153,8 @@
     {{-- ── Sidebar ── --}}
     <aside id="sidebar">
 
-        @if($seccionActiva === 'servicios')
-            <p class="sidebar-heading">Servicios</p>
+        @if($seccionActiva === 'caracterizacion')
+            <p class="sidebar-heading">Caracterización</p>
 
             <a href="{{ route('areas.index') }}"
                class="sidebar-link {{ request()->routeIs('areas.*') ? 'active' : '' }}">
@@ -166,6 +173,17 @@
                 <i class="bi bi-tags-fill"></i> Tipos de Actividad
             </a>
 
+        @elseif($seccionActiva === 'servicios')
+            <p class="sidebar-heading">Servicios</p>
+            <a href="{{ route('periodos.index') }}"
+               class="sidebar-link {{ request()->routeIs('periodos.*') ? 'active' : '' }}">
+                <i class="bi bi-calendar3"></i> Períodos
+            </a>
+            <a href="{{ route('servicios.index') }}"
+               class="sidebar-link {{ request()->routeIs('servicios.*') ? 'active' : '' }}">
+                <i class="bi bi-tools"></i> Servicios
+            </a>
+
         @elseif($seccionActiva === 'academico')
             <p class="sidebar-heading">Académico</p>
             <a href="{{ route('sedes.index') }}"
@@ -175,6 +193,10 @@
             <a href="{{ route('facultades.index') }}"
                class="sidebar-link {{ request()->routeIs('facultades.*') ? 'active' : '' }}">
                 <i class="bi bi-building"></i> Facultades
+            </a>
+            <a href="{{ route('programas.index') }}"
+               class="sidebar-link {{ request()->routeIs('programas.*') ? 'active' : '' }}">
+                <i class="bi bi-journal-bookmark-fill"></i> Programas
             </a>
 
         @elseif($seccionActiva === 'usuarios')

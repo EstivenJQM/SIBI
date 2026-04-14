@@ -7,6 +7,9 @@ use App\Http\Controllers\LineaController;
 use App\Http\Controllers\TipoActividadController;
 use App\Http\Controllers\SedeController;
 use App\Http\Controllers\FacultadController;
+use App\Http\Controllers\ProgramaController;
+use App\Http\Controllers\PeriodoController;
+use App\Http\Controllers\ServicioController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -20,3 +23,7 @@ Route::resource('tipo-actividad', TipoActividadController::class)->except(['show
 Route::resource('sedes',     SedeController::class)->except(['show']);
 Route::resource('facultades', FacultadController::class)->except(['show'])
     ->parameters(['facultades' => 'facultad']);
+Route::resource('programas', ProgramaController::class)->except(['show']);
+
+Route::resource('periodos',  PeriodoController::class)->except(['show']);
+Route::resource('servicios', ServicioController::class)->except(['show']);
