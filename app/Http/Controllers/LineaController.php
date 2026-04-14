@@ -12,7 +12,7 @@ class LineaController extends Controller
 {
     public function index()
     {
-        $lineas = Linea::with(['componente.area'])
+        $lineas = Linea::with(['componente.area', 'tiposActividad' => fn($q) => $q->orderBy('nombre')])
             ->orderBy('id_componente')
             ->orderBy('nombre')
             ->get()

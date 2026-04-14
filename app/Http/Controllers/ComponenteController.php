@@ -12,7 +12,8 @@ class ComponenteController extends Controller
     {
         $componentes = Componente::with([
             'area',
-            'lineas' => fn($q) => $q->orderBy('nombre'),
+            'lineas'                => fn($q) => $q->orderBy('nombre'),
+            'lineas.tiposActividad' => fn($q) => $q->orderBy('nombre'),
         ])
             ->orderBy('id_area')
             ->orderBy('nombre')
