@@ -9,7 +9,7 @@
                     <x-form.input
                         name="codigo"
                         label="Código"
-                        placeholder="Ej: BOG"
+                        placeholder="Ej: 10"
                         :maxlength="10"
                         autofocus
                     />
@@ -17,7 +17,7 @@
                     <x-form.input
                         name="nombre"
                         label="Nombre"
-                        placeholder="Ej: Sede Bogotá"
+                        placeholder="Ej: SEDE CENTRAL MEDELLÍN"
                         :maxlength="100"
                     />
 
