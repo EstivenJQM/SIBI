@@ -28,7 +28,7 @@
                     <x-form.input
                         name="nombre"
                         label="Nombre"
-                        placeholder="Ej: Cálculo Diferencial"
+                        placeholder="Ej: Salud Mental"
                         :maxlength="150"
                         autofocus
                     />

@@ -16,7 +16,7 @@
                     <x-form.input
                         name="nombre"
                         label="Nombre"
-                        placeholder="Ej: Matemáticas"
+                        placeholder="Ej: Psicosocial"
                         :maxlength="150"
                         autofocus
                     />

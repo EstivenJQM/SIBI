@@ -9,7 +9,7 @@
                     <x-form.input
                         name="nombre"
                         label="Nombre"
-                        placeholder="Ej: Ciencias Básicas"
+                        placeholder="Ej: Dirección de Bienestar Institucional"
                         :maxlength="150"
                         autofocus
                     />
