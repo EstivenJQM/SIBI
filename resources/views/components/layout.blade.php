@@ -100,6 +100,27 @@
             overflow-x: hidden;
         }
 
+        /* ── Botón verde SIBI ── */
+        .btn-sibi {
+            background-color: var(--sibi-green);
+            border-color: var(--sibi-green);
+            color: #fff;
+        }
+        .btn-sibi:hover, .btn-sibi:focus, .btn-sibi:active {
+            background-color: #145a39;
+            border-color: #145a39;
+            color: #fff;
+        }
+        .btn-outline-sibi {
+            color: var(--sibi-green);
+            border-color: var(--sibi-green);
+        }
+        .btn-outline-sibi:hover {
+            background-color: var(--sibi-green);
+            border-color: var(--sibi-green);
+            color: #fff;
+        }
+
         /* ── Tree colors ── */
         .tree { --indent: 1.4rem; }
         .tree-area  { border-left: 3px solid #196844; }

@@ -56,14 +56,31 @@
                 <div class="card-body py-2 px-3">
 
                     {{-- Fila de identidad --}}
-                    <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
-                        <span class="fw-semibold">{{ $usuario->nombre_completo }}</span>
-                        <span class="badge bg-secondary" style="font-size:.7rem">
-                            <i class="bi bi-person-vcard me-1"></i>{{ $usuario->documento }}
-                        </span>
-                        <span class="text-muted small">
-                            <i class="bi bi-envelope me-1"></i>{{ $usuario->correo }}
-                        </span>
+                    <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <span class="fw-semibold">{{ $usuario->nombre_completo }}</span>
+                            <span class="badge bg-secondary" style="font-size:.7rem">
+                                <i class="bi bi-person-vcard me-1"></i>{{ $usuario->documento }}
+                            </span>
+                            <span class="text-muted small">
+                                <i class="bi bi-envelope me-1"></i>{{ $usuario->correo }}
+                            </span>
+                        </div>
+                        <div class="d-flex gap-1 flex-shrink-0">
+                            <a href="{{ route('usuarios.edit', $usuario) }}"
+                               class="btn btn-sm btn-warning" title="Editar">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
+                            <form action="{{ route('usuarios.destroy', $usuario) }}" method="POST"
+                                  class="d-inline"
+                                  onsubmit="return confirm('¿Eliminar al usuario {{ $usuario->nombre_completo }}?\nSe eliminarán también todos sus roles y registros asociados.')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger" title="Eliminar">
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
+                            </form>
+                        </div>
                     </div>
 
                     {{-- Roles en sedes --}}

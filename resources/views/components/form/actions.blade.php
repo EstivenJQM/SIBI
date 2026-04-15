@@ -1,4 +1,4 @@
-@props(['back', 'label' => 'Guardar', 'color' => 'primary', 'icon' => 'bi-save'])
+@props(['back', 'label' => 'Guardar', 'color' => 'sibi', 'icon' => 'bi-save'])
 
 <div class="d-flex gap-2 mt-4">
     <button type="submit" class="btn btn-{{ $color }}">

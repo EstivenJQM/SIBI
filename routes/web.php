@@ -34,8 +34,11 @@ Route::resource('programas', ProgramaController::class)->except(['show']);
 Route::resource('periodos',  PeriodoController::class)->except(['show']);
 Route::resource('servicios', ServicioController::class)->except(['show']);
 
-Route::get ('usuarios',                          [UsuarioController::class, 'index'])
-    ->name('usuarios.index');
+Route::get   ('usuarios',                              [UsuarioController::class, 'index'])  ->name('usuarios.index');
+Route::get   ('usuarios/{usuario}/edit',              [UsuarioController::class, 'edit'])   ->name('usuarios.edit');
+Route::put   ('usuarios/{usuario}',                   [UsuarioController::class, 'update']) ->name('usuarios.update');
+Route::delete('usuarios/{usuario}',                   [UsuarioController::class, 'destroy'])->name('usuarios.destroy');
+Route::delete('usuarios/{usuario}/roles/{rolSede}',   [UsuarioController::class, 'destroyRol'])->name('usuarios.roles.destroy');
 
 Route::get ('usuarios/carga-estudiantes',        [CargaEstudiantesController::class, 'index'])
     ->name('usuarios.carga-estudiantes.index');
