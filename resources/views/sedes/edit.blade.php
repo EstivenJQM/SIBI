@@ -2,7 +2,7 @@
 
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <x-card title="<i class='bi bi-pencil-square me-2'></i>Editar Sede" color="warning">
+            <x-card title="Editar Sede" color="warning">
                 <form action="{{ route('sedes.update', $sede) }}" method="POST">
                     @csrf
                     @method('PUT')
@@ -26,7 +26,7 @@
                         :back="route('sedes.index')"
                         label="Actualizar"
                         color="warning"
-                        icon="bi-save"
+                       
                     />
                 </form>
             </x-card>

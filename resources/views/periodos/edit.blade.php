@@ -2,7 +2,7 @@
 
     <div class="row justify-content-center">
         <div class="col-md-5">
-            <x-card title="<i class='bi bi-pencil-square me-2'></i>Editar Período" color="warning">
+            <x-card title="Editar Período" color="warning">
                 <form action="{{ route('periodos.update', $periodo) }}" method="POST">
                     @csrf
                     @method('PUT')

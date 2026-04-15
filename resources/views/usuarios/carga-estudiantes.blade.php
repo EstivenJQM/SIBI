@@ -9,7 +9,7 @@
     {{-- ── Formulario de carga ── --}}
     <div class="row">
         <div class="col-md-6">
-            <x-card title="<i class='bi bi-file-earmark-spreadsheet me-2'></i>Cargar archivo CSV" color="primary">
+            <x-card title="Cargar archivo CSV" color="primary">
                 <form action="{{ route('usuarios.carga-estudiantes.store') }}" method="POST"
                       enctype="multipart/form-data">
                     @csrf
@@ -75,7 +75,7 @@
         @if(session('resultado'))
             @php $r = session('resultado'); @endphp
             <div class="col-md-6">
-                <x-card title="<i class='bi bi-clipboard-check me-2'></i>Resultado de la carga" color="success">
+                <x-card title="Resultado de la carga" color="success">
 
                     <div class="row text-center g-3 mb-3">
                         <div class="col-4">
