@@ -1,7 +1,7 @@
 <x-layout title="Nuevo Programa">
 
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-6">
             <x-card title="<i class='bi bi-plus-circle me-2'></i>Nuevo Programa" color="primary">
                 <form action="{{ route('programas.store') }}" method="POST">
                     @csrf
@@ -22,7 +22,6 @@
                         placeholder="-- Seleccione una facultad --"
                     />
 
-                    {{-- Tipo de formación agrupado por nivel --}}
                     <div class="mb-3">
                         <label for="id_tipo_formacion" class="form-label fw-semibold">
                             Tipo de formación
