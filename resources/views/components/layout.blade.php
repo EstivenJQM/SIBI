@@ -139,7 +139,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ $seccionActiva === 'usuarios' ? 'active' : '' }}"
-                   href="{{ route('usuarios.carga-estudiantes.index') }}">
+                   href="{{ route('usuarios.index') }}">
                     <i class="bi bi-people me-1"></i>Usuarios
                 </a>
             </li>
@@ -201,6 +201,10 @@
 
         @elseif($seccionActiva === 'usuarios')
             <p class="sidebar-heading">Usuarios</p>
+            <a href="{{ route('usuarios.index') }}"
+               class="sidebar-link {{ request()->routeIs('usuarios.index') ? 'active' : '' }}">
+                <i class="bi bi-people-fill"></i> Lista de Usuarios
+            </a>
             <a href="{{ route('usuarios.carga-estudiantes.index') }}"
                class="sidebar-link {{ request()->routeIs('usuarios.carga-estudiantes.*') ? 'active' : '' }}">
                 <i class="bi bi-person-fill-up"></i> Carga Estudiantes

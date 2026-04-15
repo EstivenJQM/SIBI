@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Facultad;
 use App\Models\NivelAcademico;
 use App\Models\Programa;
+use App\Models\ProgramaSede;
 use App\Models\Sede;
 use Illuminate\Http\Request;
 
@@ -16,6 +17,7 @@ class ProgramaController extends Controller
             'facultad',
             'tipoFormacion.nivel',
             'sedes' => fn($q) => $q->orderBy('nombre'),
+            'programaSedes.planesEstudio',
         ])
             ->orderBy('id_facultad')
             ->orderBy('nombre')
@@ -46,6 +48,8 @@ class ProgramaController extends Controller
             'sedes.*'           => 'exists:sede,id_sede',
             'codigo_snies'      => 'nullable|array',
             'codigo_snies.*'    => 'nullable|string|max:20',
+            'planes_estudio'    => 'nullable|array',
+            'planes_estudio.*'  => 'nullable|string|max:200',
         ], [
             'id_facultad.required' => 'Seleccione una facultad.',
             'id_facultad.exists'   => 'La facultad seleccionada no existe.',
@@ -62,6 +66,7 @@ class ProgramaController extends Controller
         ]);
 
         $programa->sedes()->sync($this->buildSedesSync($request));
+        $this->syncPlanesEstudio($programa, $request);
 
         return redirect()->route('programas.index')
             ->with('success', 'Programa creado correctamente.');
@@ -75,7 +80,15 @@ class ProgramaController extends Controller
 
         $sedesPrograma = $programa->sedes->keyBy('id_sede');
 
-        return view('programas.edit', compact('programa', 'facultades', 'niveles', 'sedes', 'sedesPrograma'));
+        $planesEstudioBySede = ProgramaSede::where('id_programa', $programa->id_programa)
+            ->with('planesEstudio')
+            ->get()
+            ->keyBy('id_sede')
+            ->map(fn($ps) => $ps->planesEstudio->pluck('codigo_plan')->implode(', '));
+
+        return view('programas.edit', compact(
+            'programa', 'facultades', 'niveles', 'sedes', 'sedesPrograma', 'planesEstudioBySede'
+        ));
     }
 
     public function update(Request $request, Programa $programa)
@@ -88,6 +101,8 @@ class ProgramaController extends Controller
             'sedes.*'           => 'exists:sede,id_sede',
             'codigo_snies'      => 'nullable|array',
             'codigo_snies.*'    => 'nullable|string|max:20',
+            'planes_estudio'    => 'nullable|array',
+            'planes_estudio.*'  => 'nullable|string|max:200',
         ], [
             'id_facultad.required' => 'Seleccione una facultad.',
             'id_facultad.exists'   => 'La facultad seleccionada no existe.',
@@ -97,6 +112,18 @@ class ProgramaController extends Controller
             'sedes.min'            => 'Debe asociar al menos una sede.',
         ]);
 
+        // Eliminar planes de estudio de sedes que se van a desasociar (evita FK constraint)
+        $removedSedeIds = array_diff(
+            $programa->sedes->pluck('id_sede')->toArray(),
+            $request->sedes
+        );
+        if ($removedSedeIds) {
+            ProgramaSede::where('id_programa', $programa->id_programa)
+                ->whereIn('id_sede', $removedSedeIds)
+                ->get()
+                ->each(fn($ps) => $ps->planesEstudio()->delete());
+        }
+
         $programa->update([
             'id_facultad'       => $request->id_facultad,
             'id_tipo_formacion' => $request->id_tipo_formacion,
@@ -104,13 +131,61 @@ class ProgramaController extends Controller
         ]);
 
         $programa->sedes()->sync($this->buildSedesSync($request));
+        $this->syncPlanesEstudio($programa, $request);
 
         return redirect()->route('programas.index')
             ->with('success', 'Programa actualizado correctamente.');
     }
 
+    public function asignacionSnies()
+    {
+        $programas = Programa::with([
+            'facultad',
+            'tipoFormacion',
+            'sedes' => fn($q) => $q->orderBy('nombre'),
+        ])
+            ->orderBy('id_facultad')
+            ->orderBy('nombre')
+            ->get()
+            ->groupBy('id_facultad');
+
+        $facultades = Facultad::orderBy('nombre')->get()->keyBy('id_facultad');
+        $niveles    = NivelAcademico::with(['tiposFormacion' => fn($q) => $q->orderBy('nombre')])->get();
+
+        return view('programas.asignacion-snies', compact('programas', 'facultades', 'niveles'));
+    }
+
+    public function guardarAsignacionSnies(Request $request)
+    {
+        $request->validate([
+            'tipo_formacion'     => 'nullable|array',
+            'tipo_formacion.*'   => 'nullable|exists:tipo_formacion,id_tipo_formacion',
+            'codigo_snies'       => 'nullable|array',
+            'codigo_snies.*'     => 'nullable|array',
+            'codigo_snies.*.*'   => 'nullable|string|max:20',
+        ]);
+
+        foreach ($request->tipo_formacion ?? [] as $idPrograma => $idTipoFormacion) {
+            Programa::where('id_programa', $idPrograma)
+                ->update(['id_tipo_formacion' => $idTipoFormacion ?: null]);
+        }
+
+        foreach ($request->codigo_snies ?? [] as $idPrograma => $sedes) {
+            foreach ($sedes as $idSede => $codigoSnies) {
+                ProgramaSede::where('id_programa', $idPrograma)
+                    ->where('id_sede', $idSede)
+                    ->update(['codigo_snies' => $codigoSnies ?: null]);
+            }
+        }
+
+        return redirect()->route('programas.asignacion-snies')
+            ->with('success', 'Asignaciones guardadas correctamente.');
+    }
+
     public function destroy(Programa $programa)
     {
+        $programa->load('programaSedes');
+        $programa->programaSedes->each(fn($ps) => $ps->planesEstudio()->delete());
         $programa->sedes()->detach();
         $programa->delete();
 
@@ -128,5 +203,27 @@ class ProgramaController extends Controller
             ];
         }
         return $sync;
+    }
+
+    /** Sincroniza los planes de estudio para cada sede del programa */
+    private function syncPlanesEstudio(Programa $programa, Request $request): void
+    {
+        foreach ($request->sedes as $idSede) {
+            $ps = ProgramaSede::where('id_programa', $programa->id_programa)
+                ->where('id_sede', $idSede)
+                ->first();
+
+            if (! $ps) {
+                continue;
+            }
+
+            $ps->planesEstudio()->delete();
+
+            $raw = $request->planes_estudio[$idSede] ?? '';
+            $codes = array_filter(array_map('trim', explode(',', $raw)));
+            foreach ($codes as $codigo) {
+                $ps->planesEstudio()->create(['codigo_plan' => $codigo]);
+            }
+        }
     }
 }

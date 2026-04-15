@@ -11,6 +11,11 @@ class Programa extends Model
 
     protected $fillable = ['id_facultad', 'id_tipo_formacion', 'nombre'];
 
+    public function programaSedes()
+    {
+        return $this->hasMany(ProgramaSede::class, 'id_programa', 'id_programa');
+    }
+
     public function facultad()
     {
         return $this->belongsTo(Facultad::class, 'id_facultad', 'id_facultad');

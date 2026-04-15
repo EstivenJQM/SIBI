@@ -4,9 +4,14 @@
         <h2 class="mb-0">
             <i class="bi bi-journal-bookmark-fill me-2" style="color:#196844"></i>Programas
         </h2>
-        <a href="{{ route('programas.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-lg me-1"></i> Nuevo Programa
-        </a>
+        <div class="d-flex gap-2">
+            <a href="{{ route('programas.asignacion-snies') }}" class="btn btn-outline-primary">
+                <i class="bi bi-card-checklist me-1"></i> Asignar SNIES / Tipo formación
+            </a>
+            <a href="{{ route('programas.create') }}" class="btn btn-primary">
+                <i class="bi bi-plus-lg me-1"></i> Nuevo Programa
+            </a>
+        </div>
     </div>
 
     @if($programas->isEmpty())
@@ -45,10 +50,16 @@
                                         @endif
                                     </div>
 
-                                    {{-- Sedes con SNIES --}}
+                                    {{-- Sedes con SNIES y planes de estudio --}}
                                     @if($programa->sedes->isNotEmpty())
+                                        @php
+                                            $psBySede = $programa->programaSedes->keyBy('id_sede');
+                                        @endphp
                                         <div class="d-flex flex-wrap gap-2 mt-1">
                                             @foreach($programa->sedes as $sede)
+                                                @php
+                                                    $planes = $psBySede[$sede->id_sede]->planesEstudio ?? collect();
+                                                @endphp
                                                 <span class="badge d-flex align-items-center gap-1 px-2 py-1"
                                                       style="background-color:#196844;font-size:.75rem">
                                                     <span class="badge bg-white text-dark" style="font-size:.65rem">
@@ -60,6 +71,11 @@
                                                             SNIES {{ $sede->pivot->codigo_snies }}
                                                         </span>
                                                     @endif
+                                                    @foreach($planes as $plan)
+                                                        <span class="badge bg-info text-dark ms-1" style="font-size:.65rem">
+                                                            Plan {{ $plan->codigo_plan }}
+                                                        </span>
+                                                    @endforeach
                                                 </span>
                                             @endforeach
                                         </div>

@@ -11,6 +11,7 @@ use App\Http\Controllers\ProgramaController;
 use App\Http\Controllers\PeriodoController;
 use App\Http\Controllers\ServicioController;
 use App\Http\Controllers\CargaEstudiantesController;
+use App\Http\Controllers\UsuarioController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -24,10 +25,17 @@ Route::resource('tipo-actividad', TipoActividadController::class)->except(['show
 Route::resource('sedes',     SedeController::class)->except(['show']);
 Route::resource('facultades', FacultadController::class)->except(['show'])
     ->parameters(['facultades' => 'facultad']);
+Route::get ('programas/asignacion-snies',  [ProgramaController::class, 'asignacionSnies'])
+    ->name('programas.asignacion-snies');
+Route::post('programas/asignacion-snies',  [ProgramaController::class, 'guardarAsignacionSnies'])
+    ->name('programas.asignacion-snies.guardar');
 Route::resource('programas', ProgramaController::class)->except(['show']);
 
 Route::resource('periodos',  PeriodoController::class)->except(['show']);
 Route::resource('servicios', ServicioController::class)->except(['show']);
+
+Route::get ('usuarios',                          [UsuarioController::class, 'index'])
+    ->name('usuarios.index');
 
 Route::get ('usuarios/carga-estudiantes',        [CargaEstudiantesController::class, 'index'])
     ->name('usuarios.carga-estudiantes.index');

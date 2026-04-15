@@ -49,7 +49,11 @@
                         @enderror
                     </div>
 
-                    <x-form.sedes-snies :sedes="$sedes" :sedesPrograma="$sedesPrograma" />
+                    <x-form.sedes-snies
+                        :sedes="$sedes"
+                        :sedesPrograma="$sedesPrograma"
+                        :planesEstudioBySede="$planesEstudioBySede"
+                    />
 
                     <x-form.actions
                         :back="route('programas.index')"
