@@ -110,7 +110,7 @@
 <body class="bg-light">
 
 {{-- ═══════════════════ TOP NAVBAR ═══════════════════ --}}
-<nav class="navbar navbar-top navbar-expand-lg px-3" style="height:56px">
+<nav class="navbar navbar-top navbar-expand-lg px-3 sticky-top" style="height:56px">
     <a class="navbar-brand me-4" href="/">SIBI</a>
 
     <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#topMenu">

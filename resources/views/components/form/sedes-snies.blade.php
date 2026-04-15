@@ -19,7 +19,8 @@
         <div class="text-danger small mb-1">{{ $message }}</div>
     @enderror
 
-    <div class="border rounded" style="max-height:340px; overflow:auto;">
+    <div class="border rounded-3" style="overflow:hidden;">
+        <div style="max-height:340px; overflow:auto;">
         <table class="table table-sm table-hover mb-0" style="min-width:600px">
             <thead class="table-light">
                 <tr>
@@ -94,8 +95,8 @@
                 @endforeach
             </tbody>
         </table>
+        </div>
     </div>
-</div>
 
 <script>
 document.querySelectorAll('.sede-check').forEach(function(checkbox) {
