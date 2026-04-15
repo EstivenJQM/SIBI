@@ -102,31 +102,33 @@
                                         default      => '#f3f4f6',
                                     };
                                 @endphp
-                                <div class="d-flex align-items-start flex-wrap gap-1"
+                                <div class="d-flex align-items-center flex-wrap gap-1"
                                      style="padding:4px 6px; background:{{ $rolBg }}; border-radius:.375rem; border-left: 3px solid {{ $rolColor }}">
 
+                                    @php $bs = 'd-inline-flex align-items-center px-2 py-0 gap-1'; $bh = 'height:1.6rem;font-size:.7rem'; @endphp
+
                                     {{-- Rol --}}
-                                    <span class="badge" style="background-color:{{ $rolColor }};font-size:.72rem">
+                                    <span class="badge {{ $bs }}" style="{{ $bh }};background-color:{{ $rolColor }}">
                                         {{ $entry->rol?->nombre ?? '—' }}
                                     </span>
 
                                     {{-- Sede --}}
                                     @if($entry->sede)
-                                        <span class="badge bg-white text-dark border" style="font-size:.7rem">
-                                            <span class="badge bg-secondary me-1" style="font-size:.62rem">{{ $entry->sede->codigo }}</span>{{ $entry->sede->nombre }}
+                                        <span class="badge bg-white text-dark border {{ $bs }}" style="{{ $bh }}">
+                                            <span class="badge bg-secondary" style="font-size:.62rem">{{ $entry->sede->codigo }}</span>{{ $entry->sede->nombre }}
                                         </span>
                                     @endif
 
                                     {{-- Período --}}
                                     @if($entry->periodo)
-                                        <span class="badge bg-light text-dark border" style="font-size:.7rem">
-                                            <i class="bi bi-calendar3 me-1"></i>{{ $entry->periodo->nombre }}
+                                        <span class="badge bg-light text-dark border {{ $bs }}" style="{{ $bh }}">
+                                            <i class="bi bi-calendar3"></i>{{ $entry->periodo->nombre }}
                                         </span>
                                     @endif
 
                                     {{-- Estado --}}
-                                    <span class="badge {{ $entry->estado === 'activo' ? 'bg-success' : 'bg-danger' }}"
-                                          style="font-size:.68rem">
+                                    <span class="badge {{ $bs }} {{ $entry->estado === 'activo' ? 'bg-success' : 'bg-danger' }}"
+                                          style="{{ $bh }}">
                                         {{ ucfirst($entry->estado) }}
                                     </span>
 
