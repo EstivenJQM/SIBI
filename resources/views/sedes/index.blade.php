@@ -19,7 +19,7 @@
                 </div>
                 <div class="d-flex gap-1">
                     <a href="{{ route('sedes.edit', $sede) }}"
-                       class="btn btn-sm btn-warning" title="Editar">
+                       class="btn btn-sm btn-outline-secondary" title="Editar">
                         <i class="bi bi-pencil-fill"></i>
                     </a>
                     <form action="{{ route('sedes.destroy', $sede) }}" method="POST"

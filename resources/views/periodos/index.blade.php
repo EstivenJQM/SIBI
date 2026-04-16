@@ -34,7 +34,7 @@
                             </td>
                             <td class="text-end align-middle">
                                 <a href="{{ route('periodos.edit', $periodo) }}"
-                                   class="btn btn-sm btn-warning" title="Editar">
+                                   class="btn btn-sm btn-outline-secondary" title="Editar">
                                     <i class="bi bi-pencil-fill"></i>
                                 </a>
                                 <form action="{{ route('periodos.destroy', $periodo) }}" method="POST"

@@ -39,7 +39,7 @@
                     {{-- Acciones --}}
                     <div class="d-flex gap-1 ms-3 flex-shrink-0">
                         <a href="{{ route('tipo-actividad.edit', $tipo) }}"
-                           class="btn btn-sm btn-warning" title="Editar">
+                           class="btn btn-sm btn-outline-secondary" title="Editar">
                             <i class="bi bi-pencil-fill"></i>
                         </a>
                         <form action="{{ route('tipo-actividad.destroy', $tipo) }}" method="POST" class="d-inline"

@@ -24,7 +24,7 @@
         </div>
         <div class="d-flex gap-1">
             <a href="{{ route('areas.edit', $area) }}"
-               class="btn btn-sm btn-warning" title="Editar área">
+               class="btn btn-sm btn-outline-secondary" title="Editar área">
                 <i class="bi bi-pencil-fill"></i>
             </a>
             <form action="{{ route('areas.destroy', $area) }}" method="POST" class="d-inline"

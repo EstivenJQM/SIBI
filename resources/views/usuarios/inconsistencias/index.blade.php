@@ -146,7 +146,7 @@
                                 <td class="text-end pe-2">
                                     <div class="d-flex gap-1 justify-content-end">
                                         <a href="{{ route('usuarios.inconsistencias.edit', $inc) }}"
-                                           class="btn btn-sm btn-warning" title="Corregir">
+                                           class="btn btn-sm btn-outline-secondary" title="Corregir">
                                             <i class="bi bi-pencil-fill"></i>
                                         </a>
                                         <form action="{{ route('usuarios.inconsistencias.destroy', $inc) }}"

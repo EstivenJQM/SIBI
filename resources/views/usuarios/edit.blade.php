@@ -148,7 +148,7 @@
                             </div>
 
                             <div class="mt-3">
-                                <button type="submit" class="btn btn-warning">
+                                <button type="submit" class="btn btn-outline-secondary">
                                     <i class="bi bi-save me-1"></i> Guardar estados
                                 </button>
                             </div>

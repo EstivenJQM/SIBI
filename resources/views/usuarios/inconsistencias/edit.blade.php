@@ -235,7 +235,7 @@
 
                     {{-- ── Acciones ── --}}
                     <div class="d-flex gap-2 mt-4">
-                        <button type="submit" class="btn btn-warning">
+                        <button type="submit" class="btn btn-outline-secondary">
                             <i class="bi bi-check-lg me-1"></i>Guardar registro corregido
                         </button>
                         <a href="{{ route('usuarios.inconsistencias.index') }}"
