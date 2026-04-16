@@ -23,7 +23,12 @@
                         @enderror
                     </div>
 
-                    <x-form.actions :back="route('periodos.index')" label="Actualizar" />
+                    <x-form.actions
+                        :back="route('areas.index')"
+                        label="Actualizar"
+                        color="warning"
+                       
+                    />
                 </form>
             </x-card>
         </div>

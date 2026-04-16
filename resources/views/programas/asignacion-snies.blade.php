@@ -33,7 +33,7 @@
             @foreach($facultades as $idFacultad => $facultad)
                 @if($programas->has($idFacultad))
                     <div class="d-flex align-items-center gap-2 mt-3 mb-2">
-                        <span class="badge px-3 py-2 fs-6" style="background-color:#196844">
+                        <span class="badge px-3 py-2 fs-6" style="background-color:#ffc107;color:#000">
                             <i class="bi bi-building me-1"></i>{{ $facultad->nombre }}
                         </span>
                     </div>
