@@ -48,7 +48,7 @@ class InconsistenciaController extends Controller
             'documento'       => 'required|string|max:20',
             'nombres'         => 'required|string|max:100',
             'apellidos'       => 'required|string|max:100',
-            'email'           => 'nullable|string|max:100',
+            'email'           => 'required|string|max:100',
             'codigo_sede'     => 'required|string|max:10',
             'nombre_sede'     => 'required|string|max:100',
             'codigo_plan'     => 'required|string|max:20',
@@ -65,6 +65,7 @@ class InconsistenciaController extends Controller
             'codigo_plan.required'  => 'El código de plan es obligatorio.',
             'nombre_programa.required' => 'El nombre del programa es obligatorio.',
             'nombre_facultad.required' => 'El nombre de la facultad es obligatorio.',
+            'email.required'           => 'El email es obligatorio.',
         ]);
 
         // Actualizar los datos corregidos en la inconsistencia

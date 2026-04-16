@@ -17,17 +17,12 @@ class UsuarioController extends Controller
         $soloEstudiantes = $request->boolean('solo_estudiantes');
         $busqueda        = trim($request->get('q', ''));
 
-        $with = [
+        $query = Usuario::with([
             'rolesEnSedes.rol',
             'rolesEnSedes.sede',
             'rolesEnSedes.periodo',
-        ];
-
-        if ($soloEstudiantes) {
-            $with[] = 'rolesEnSedes.estudianteEgresado.planEstudio.programaSede.programa.facultad';
-        }
-
-        $query = Usuario::with($with);
+            'rolesEnSedes.estudianteEgresado.planEstudio.programaSede.programa.facultad',
+        ]);
 
         if ($soloEstudiantes) {
             $query->whereHas('rolesEnSedes.rol', fn($q) => $q->where('nombre', 'Estudiante'));

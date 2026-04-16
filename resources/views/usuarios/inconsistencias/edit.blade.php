@@ -106,7 +106,9 @@
                             @enderror
                         </div>
                         <div class="col-sm-12">
-                            <label class="form-label small fw-semibold">Email</label>
+                            <label class="form-label small fw-semibold">
+                                Email <span class="text-danger">*</span>
+                            </label>
                             <input type="text" name="email"
                                    value="{{ old('email', $inconsistencia->email) }}"
                                    maxlength="100"

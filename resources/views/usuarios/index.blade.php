@@ -139,7 +139,7 @@
                                         {{ ucfirst($entry->estado) }}
                                     </span>
 
-                                    @if($soloEstudiantes && $esEstudiante && $entry->estudianteEgresado)
+                                    @if($esEstudiante && $entry->estudianteEgresado)
                                         @php
                                             $plan     = $entry->estudianteEgresado->planEstudio;
                                             $progSede = $plan?->programaSede;
@@ -182,14 +182,33 @@
     @endif
 
 <script>
+    const STORAGE_KEY = 'usuarios_open';
+
     document.addEventListener('DOMContentLoaded', () => {
+        const abiertos = new Set(JSON.parse(sessionStorage.getItem(STORAGE_KEY) ?? '[]'));
+
         document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(btn => {
-            const collapseEl = document.querySelector(btn.getAttribute('data-bs-target'));
+            const target     = btn.getAttribute('data-bs-target');
+            const collapseEl = document.querySelector(target);
             if (!collapseEl) return;
             const icon = btn.querySelector('.toggle-icon');
-            if (!icon) return;
-            collapseEl.addEventListener('show.bs.collapse', () => icon.style.transform = 'rotate(90deg)');
-            collapseEl.addEventListener('hide.bs.collapse', () => icon.style.transform = 'rotate(0deg)');
+
+            // Restaurar estado abierto si estaba guardado
+            if (abiertos.has(target)) {
+                bootstrap.Collapse.getOrCreateInstance(collapseEl, { toggle: false }).show();
+            }
+
+            collapseEl.addEventListener('show.bs.collapse', () => {
+                if (icon) icon.style.transform = 'rotate(90deg)';
+                abiertos.add(target);
+                sessionStorage.setItem(STORAGE_KEY, JSON.stringify([...abiertos]));
+            });
+
+            collapseEl.addEventListener('hide.bs.collapse', () => {
+                if (icon) icon.style.transform = 'rotate(0deg)';
+                abiertos.delete(target);
+                sessionStorage.setItem(STORAGE_KEY, JSON.stringify([...abiertos]));
+            });
         });
     });
 </script>

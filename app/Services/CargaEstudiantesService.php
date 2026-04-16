@@ -70,8 +70,28 @@ class CargaEstudiantesService
                 $nombreFacultad,
             ] = array_map('trim', array_slice($cols, 0, 9));
 
-            if (empty($documento)) {
-                $errores[] = "Fila {$fila}: documento vacío.";
+            // Validar campos NOT NULL de la tabla usuario
+            $camposVacios = [];
+            if (empty($documento))      $camposVacios[] = 'documento';
+            if (empty($nombres))        $camposVacios[] = 'nombres';
+            if (empty($apellidos))      $camposVacios[] = 'apellidos';
+            if (empty($email))          $camposVacios[] = 'email';
+            if (empty($codigoSede))     $camposVacios[] = 'código de sede';
+            if (empty($nombreSede))     $camposVacios[] = 'nombre de sede';
+            if (empty($codigoPlan))     $camposVacios[] = 'código de plan';
+            if (empty($nombrePrograma)) $camposVacios[] = 'nombre del programa';
+            if (empty($nombreFacultad)) $camposVacios[] = 'nombre de la facultad';
+
+            if (! empty($camposVacios)) {
+                $msg       = 'Fila ' . $fila . ': campo(s) obligatorio(s) vacío(s): ' . implode(', ', $camposVacios) . '.';
+                $errores[] = $msg;
+                $this->guardarInconsistencia(
+                    $idPeriodo, $fila,
+                    $documento, $nombres, $apellidos, $email,
+                    $codigoSede, $nombreSede, $codigoPlan,
+                    $nombrePrograma, $nombreFacultad,
+                    implode(', ', array_map(fn($c) => ucfirst($c) . ' es obligatorio', $camposVacios)) . '.'
+                );
                 continue;
             }
 
@@ -441,6 +461,23 @@ class CargaEstudiantesService
         $this->planCache     = [];
 
         $this->cargarCaches();
+
+        // Validar campos NOT NULL antes de intentar insertar
+        $vacios = [];
+        if (empty($documento))      $vacios[] = 'documento';
+        if (empty($nombres))        $vacios[] = 'nombres';
+        if (empty($apellidos))      $vacios[] = 'apellidos';
+        if (empty($email))          $vacios[] = 'email';
+        if (empty($codigoSede))     $vacios[] = 'código de sede';
+        if (empty($nombreSede))     $vacios[] = 'nombre de sede';
+        if (empty($codigoPlan))     $vacios[] = 'código de plan';
+        if (empty($nombrePrograma)) $vacios[] = 'nombre del programa';
+        if (empty($nombreFacultad)) $vacios[] = 'nombre de la facultad';
+
+        if (! empty($vacios)) {
+            $msg = implode(', ', array_map(fn($c) => ucfirst($c) . ' es obligatorio', $vacios)) . '.';
+            return [false, $msg];
+        }
 
         try {
             DB::beginTransaction();
