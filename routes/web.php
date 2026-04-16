@@ -11,6 +11,7 @@ use App\Http\Controllers\ProgramaController;
 use App\Http\Controllers\PeriodoController;
 use App\Http\Controllers\ServicioController;
 use App\Http\Controllers\CargaEstudiantesController;
+use App\Http\Controllers\InconsistenciaController;
 use App\Http\Controllers\UsuarioController;
 
 Route::get('/', function () {
@@ -44,3 +45,10 @@ Route::get ('usuarios/carga-estudiantes',        [CargaEstudiantesController::cl
     ->name('usuarios.carga-estudiantes.index');
 Route::post('usuarios/carga-estudiantes',        [CargaEstudiantesController::class, 'store'])
     ->name('usuarios.carga-estudiantes.store');
+
+// Inconsistencias de carga (definidas antes de rutas con {usuario})
+Route::get   ('usuarios/inconsistencias',                          [InconsistenciaController::class, 'index'])     ->name('usuarios.inconsistencias.index');
+Route::get   ('usuarios/inconsistencias/{inconsistencia}/edit',    [InconsistenciaController::class, 'edit'])      ->name('usuarios.inconsistencias.edit');
+Route::put   ('usuarios/inconsistencias/{inconsistencia}',         [InconsistenciaController::class, 'update'])    ->name('usuarios.inconsistencias.update');
+Route::delete('usuarios/inconsistencias/{inconsistencia}',         [InconsistenciaController::class, 'destroy'])   ->name('usuarios.inconsistencias.destroy');
+Route::delete('usuarios/inconsistencias',                          [InconsistenciaController::class, 'destroyAll'])->name('usuarios.inconsistencias.destroy-all');

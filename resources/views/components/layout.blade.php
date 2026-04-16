@@ -230,6 +230,14 @@
                class="sidebar-link {{ request()->routeIs('usuarios.carga-estudiantes.*') ? 'active' : '' }}">
                 <i class="bi bi-person-fill-up"></i> Carga Estudiantes
             </a>
+            @php $totalInc = \App\Models\CargaInconsistencia::count(); @endphp
+            <a href="{{ route('usuarios.inconsistencias.index') }}"
+               class="sidebar-link {{ request()->routeIs('usuarios.inconsistencias.*') ? 'active' : '' }}">
+                <i class="bi bi-exclamation-triangle-fill"></i> Inconsistencias
+                @if($totalInc > 0)
+                    <span class="badge bg-danger ms-auto" style="font-size:.6rem">{{ $totalInc }}</span>
+                @endif
+            </a>
 
         @else
             <p class="sidebar-heading">Menú</p>

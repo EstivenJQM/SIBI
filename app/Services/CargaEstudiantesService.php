@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CargaEstudiantesService
 {
@@ -91,7 +92,17 @@ class CargaEstudiantesService
                 $esNuevo ? $creados++ : $actualizados++;
             } catch (\Throwable $e) {
                 DB::rollBack();
-                $errores[] = "Fila {$fila} (doc: {$documento}): " . $e->getMessage();
+                $msgError  = $e->getMessage();
+                $errores[] = "Fila {$fila} (doc: {$documento}): {$msgError}";
+
+                // Persistir la fila fallida para revisión posterior
+                $this->guardarInconsistencia(
+                    $idPeriodo, $fila,
+                    $documento, $nombres, $apellidos, $email,
+                    $codigoSede, $nombreSede, $codigoPlan,
+                    $nombrePrograma, $nombreFacultad,
+                    $msgError
+                );
             }
         }
 
@@ -149,17 +160,9 @@ class CargaEstudiantesService
             return $this->sedeCache[$codigo];
         }
 
-        $id = DB::table('sede')->insertGetId([
-            'codigo'     => $codigo,
-            'nombre'     => mb_strtoupper(trim($nombre)),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        $sede = DB::table('sede')->where('id_sede', $id)->first();
-        $this->sedeCache[$codigo] = $sede;
-
-        return $sede;
+        throw new \RuntimeException(
+            "La sede con código \"{$codigo}\" ({$nombre}) no existe. Regístrela primero en el módulo de Sedes."
+        );
     }
 
     private function resolverFacultad(string $nombre): object
@@ -403,5 +406,100 @@ class CargaEstudiantesService
             $partes[0] ?? '',
             isset($partes[1]) && $partes[1] !== '' ? $partes[1] : null,
         ];
+    }
+
+    // ─────────────────────────────────────────────
+    //  Reprocesar una sola fila (desde corrección manual)
+    // ─────────────────────────────────────────────
+
+    /**
+     * Procesa una fila individual (usada al corregir una inconsistencia).
+     * Devuelve [true, null] en éxito o [false, 'mensaje de error'] en fallo.
+     */
+    public function procesarFilaIndividual(
+        int    $idPeriodo,
+        string $documento,
+        string $nombres,
+        string $apellidos,
+        string $email,
+        string $codigoSede,
+        string $nombreSede,
+        string $codigoPlan,
+        string $nombrePrograma,
+        string $nombreFacultad,
+    ): array {
+        $this->idPeriodo       = $idPeriodo;
+        $this->idRolEstudiante = (int) DB::table('rol')
+            ->where('nombre', 'Estudiante')
+            ->value('id_rol');
+
+        // Reiniciar caches para leer el estado actual de la BD
+        $this->sedeCache     = [];
+        $this->facultadCache = [];
+        $this->programaCache = [];
+        $this->progSedeCache = [];
+        $this->planCache     = [];
+
+        $this->cargarCaches();
+
+        try {
+            DB::beginTransaction();
+
+            $sede       = $this->resolverSede($codigoSede, $nombreSede);
+            $facultad   = $this->resolverFacultad($nombreFacultad);
+            $this->resolverFacultadSede($facultad->id_facultad, $sede->id_sede);
+            $programa   = $this->resolverPrograma($nombrePrograma, $facultad->id_facultad);
+            $idProgSede = $this->resolverProgramaSede($programa->id_programa, $sede->id_sede);
+            $idPlan     = $this->resolverPlanEstudio($idProgSede, $codigoPlan);
+            [$usuario,] = $this->resolverUsuario($documento, $nombres, $apellidos, $email);
+            $idUrs      = $this->resolverUsuarioRolSede($usuario->id_usuario, $sede->id_sede);
+            $this->resolverEstudianteEgresado($idUrs, $idPlan);
+
+            DB::commit();
+            return [true, null];
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return [false, $e->getMessage()];
+        }
+    }
+
+    // ─────────────────────────────────────────────
+    //  Persistencia de inconsistencias
+    // ─────────────────────────────────────────────
+
+    private function guardarInconsistencia(
+        int    $idPeriodo,
+        int    $fila,
+        string $documento,
+        string $nombres,
+        string $apellidos,
+        string $email,
+        string $codigoSede,
+        string $nombreSede,
+        string $codigoPlan,
+        string $nombrePrograma,
+        string $nombreFacultad,
+        string $error,
+    ): void {
+        try {
+            DB::table('carga_inconsistencia')->insert([
+                'id_periodo'      => $idPeriodo,
+                'fila'            => $fila,
+                'documento'       => $documento,
+                'nombres'         => $nombres,
+                'apellidos'       => $apellidos,
+                'email'           => $email,
+                'codigo_sede'     => $codigoSede,
+                'nombre_sede'     => $nombreSede,
+                'codigo_plan'     => $codigoPlan,
+                'nombre_programa' => $nombrePrograma,
+                'nombre_facultad' => $nombreFacultad,
+                'error'           => $error,
+                'created_at'      => now(),
+                'updated_at'      => now(),
+            ]);
+        } catch (\Throwable $ex) {
+            Log::error('No se pudo guardar inconsistencia: ' . $ex->getMessage());
+        }
     }
 }

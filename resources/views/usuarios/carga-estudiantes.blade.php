@@ -62,6 +62,12 @@
                         <code class="small d-block text-wrap" style="font-size:.72rem">
                             DOCUMENTO ; NOMBRES ; APELLIDOS ; EMAIL ; SEDE ; NOMBRE DE LA SEDE ; PLAN ; PROGRAMA ACADEMICO ; FACULTAD
                         </code>
+                        <p class="small text-muted mt-2 mb-0">
+                            <i class="bi bi-exclamation-triangle me-1 text-warning"></i>
+                            El código de <strong>SEDE</strong> debe existir previamente en el
+                            <a href="{{ route('sedes.index') }}">módulo de Sedes</a>.
+                            Las filas con sedes desconocidas se registrarán como errores.
+                        </p>
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100">
