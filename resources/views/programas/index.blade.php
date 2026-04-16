@@ -2,7 +2,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="mb-0">
-            <i class="bi bi-journal-bookmark-fill me-2" style="color:#196844"></i>Programas
+            <i class="bi bi-journal-bookmark-fill me-2" style="color:#fd7e14"></i>Programas
         </h2>
         <div class="d-flex gap-2">
             <a href="{{ route('programas.asignacion-snies') }}" class="btn btn-outline-sibi">
@@ -27,7 +27,7 @@
 
                 {{-- Cabecera facultad --}}
                 <div class="d-flex align-items-center gap-2 mt-3 mb-2">
-                    <span class="badge px-3 py-2 fs-6" style="background-color:#196844">
+                    <span class="badge px-3 py-2 fs-6" style="background-color:#ffc107;color:#000">
                         <i class="bi bi-building me-1"></i>{{ $facultad->nombre }}
                     </span>
                 </div>
@@ -40,12 +40,12 @@
                         $conteo      = $totalPlanes ?: $programa->sedes->count();
                     @endphp
 
-                    <div class="tree-area rounded p-3 mb-2 bg-white shadow-sm">
+                    <div class="tree-area rounded p-3 mb-2 bg-white shadow-sm" style="border-left-color:#fd7e14">
 
                         {{-- Fila principal --}}
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex align-items-center gap-2 flex-grow-1">
-                                <span class="badge rounded-pill px-2" style="background-color:#196844">Programa</span>
+                                <span class="badge rounded-pill px-2" style="background-color:#fd7e14">Programa</span>
                                 <button class="btn btn-link text-start fw-bold fs-6 p-0 text-decoration-none text-dark d-flex align-items-center gap-1"
                                         type="button"
                                         data-bs-toggle="collapse"
@@ -54,7 +54,7 @@
                                     <i class="bi bi-chevron-right toggle-icon" style="font-size:.75rem;transition:transform .2s"></i>
                                     {{ $programa->nombre }}
                                     @if($conteo)
-                                        <span class="badge fw-normal ms-1" style="font-size:.7rem;background-color:#d1e7dd;color:#196844">
+                                        <span class="badge fw-normal ms-1" style="font-size:.7rem;background-color:#ffe5d0;color:#7d3800">
                                             {{ $conteo }}
                                         </span>
                                     @endif

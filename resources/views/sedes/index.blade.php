@@ -2,7 +2,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="mb-0">
-            <i class="bi bi-geo-alt-fill me-2" style="color:#196844"></i>Sedes
+            <i class="bi bi-geo-alt-fill me-2" style="color:#dc3545"></i>Sedes
         </h2>
         <a href="{{ route('sedes.create') }}" class="btn btn-sibi">
             <i class="bi bi-plus-lg me-1"></i> Nueva Sede
@@ -10,10 +10,10 @@
     </div>
 
     @forelse($sedes as $sede)
-        <div class="tree-area rounded p-3 mb-2 bg-white shadow-sm">
+        <div class="tree-area rounded p-3 mb-2 bg-white shadow-sm" style="border-left-color:#dc3545">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center gap-2">
-                    <span class="badge rounded-pill px-2" style="background-color:#196844">Sede</span>
+                    <span class="badge rounded-pill px-2" style="background-color:#dc3545">Sede</span>
                     <span class="badge bg-secondary">{{ $sede->codigo }}</span>
                     <span class="fw-semibold">{{ $sede->nombre }}</span>
                 </div>

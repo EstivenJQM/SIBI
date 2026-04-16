@@ -2,7 +2,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="mb-0">
-            <i class="bi bi-building me-2" style="color:#196844"></i>Facultades
+            <i class="bi bi-building me-2" style="color:#ffc107"></i>Facultades
         </h2>
         <a href="{{ route('facultades.create') }}" class="btn btn-sibi">
             <i class="bi bi-plus-lg me-1"></i> Nueva Facultad
@@ -12,11 +12,11 @@
     @forelse($facultades as $facultad)
         @php $collapseId = 'fac-' . $facultad->id_facultad; @endphp
 
-        <div class="tree-area rounded p-3 mb-2 bg-white shadow-sm">
+        <div class="tree-area rounded p-3 mb-2 bg-white shadow-sm" style="border-left-color:#ffc107">
 
             <div class="d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center gap-2 flex-grow-1">
-                    <span class="badge rounded-pill px-2" style="background-color:#196844">Facultad</span>
+                    <span class="badge rounded-pill px-2" style="background-color:#ffc107;color:#000">Facultad</span>
                     <button class="btn btn-link text-start fw-bold fs-6 p-0 text-decoration-none text-dark d-flex align-items-center gap-1"
                             type="button"
                             data-bs-toggle="collapse"
@@ -25,7 +25,7 @@
                         <i class="bi bi-chevron-right toggle-icon" style="font-size:.75rem;transition:transform .2s"></i>
                         {{ $facultad->nombre }}
                         @if($facultad->sedes->isNotEmpty())
-                            <span class="badge fw-normal ms-1" style="font-size:.7rem;background-color:#d1e7dd;color:#196844">
+                            <span class="badge fw-normal ms-1" style="font-size:.7rem;background-color:#fff3cd;color:#856404">
                                 {{ $facultad->sedes->count() }}
                             </span>
                         @endif
@@ -53,7 +53,7 @@
                     <div class="d-flex flex-wrap gap-2">
                         @foreach($facultad->sedes as $sede)
                             <span class="badge d-flex align-items-center gap-1 px-2 py-1"
-                                  style="background-color:#196844; font-size:.78rem">
+                                  style="background-color:#dc3545; font-size:.78rem">
                                 <span class="badge bg-white text-dark" style="font-size:.68rem">
                                     {{ $sede->codigo }}
                                 </span>

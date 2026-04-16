@@ -2,7 +2,7 @@
 
 @php $areaId = 'area-' . $area->id_area; @endphp
 
-<div class="tree-area rounded p-3 mb-3 bg-white shadow-sm">
+<div class="tree-area rounded p-3 mb-3 bg-white shadow-sm" style="border-left-color:#0d6efd">
 
     {{-- Área --}}
     <div class="d-flex justify-content-between align-items-center">
