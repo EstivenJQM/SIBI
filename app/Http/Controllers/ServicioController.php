@@ -20,6 +20,7 @@ class ServicioController extends Controller
             'sede',
             'periodo',
         ])
+            ->withCount('usuariosAsignados')
             ->orderByDesc('fecha')
             ->get()
             ->groupBy('id_periodo');

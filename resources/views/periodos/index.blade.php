@@ -36,7 +36,7 @@
 
                             {{-- Semestre --}}
                             <span class="badge mb-3"
-                                  style="background-color:{{ $esPrimero ? '#196844' : '#0d6efd' }};font-size:.8rem">
+                                  style="background-color:{{ $esPrimero ? '#196844' : '#ffd400' }};color:{{ $esPrimero ? '#fff' : '#000' }};font-size:.8rem">
                                 <i class="bi bi-{{ $esPrimero ? 'sunrise' : 'sunset' }} me-1"></i>
                                 {{ $esPrimero ? 'Primer semestre' : 'Segundo semestre' }}
                             </span>
