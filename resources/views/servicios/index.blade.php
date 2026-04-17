@@ -63,6 +63,10 @@
                                         {{ $servicio->fecha->format('d/m/Y') }}
                                     </td>
                                     <td class="text-end align-middle">
+                                        <a href="{{ route('servicios.show', $servicio) }}"
+                                           class="btn btn-sm btn-outline-sibi" title="Ver / Asignar usuarios">
+                                            <i class="bi bi-people-fill"></i>
+                                        </a>
                                         <a href="{{ route('servicios.edit', $servicio) }}"
                                            class="btn btn-sm btn-outline-secondary" title="Editar">
                                             <i class="bi bi-pencil-fill"></i>

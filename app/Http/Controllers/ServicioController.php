@@ -6,6 +6,7 @@ use App\Models\Linea;
 use App\Models\Periodo;
 use App\Models\Sede;
 use App\Models\Servicio;
+use App\Services\CargaServicioUsuariosService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -26,6 +27,20 @@ class ServicioController extends Controller
         $periodos = Periodo::orderByDesc('nombre')->get()->keyBy('id_periodo');
 
         return view('servicios.index', compact('servicios', 'periodos'));
+    }
+
+    public function show(Servicio $servicio)
+    {
+        $servicio->load([
+            'linea.componente.area',
+            'tipoActividad',
+            'sede',
+            'periodo',
+            'usuariosAsignados.usuario',
+            'usuariosAsignados.rol',
+        ]);
+
+        return view('servicios.show', compact('servicio'));
     }
 
     public function create()
@@ -153,5 +168,34 @@ class ServicioController extends Controller
 
         return redirect()->route('servicios.index')
             ->with('success', 'Servicio eliminado correctamente.');
+    }
+
+    public function asignarUsuarios(
+        Request $request,
+        Servicio $servicio,
+        CargaServicioUsuariosService $service
+    ) {
+        $request->validate([
+            'archivo' => 'required|file|mimes:txt,csv|max:5120',
+        ], [
+            'archivo.required' => 'Seleccione un archivo.',
+            'archivo.mimes'    => 'El archivo debe ser .txt o .csv.',
+            'archivo.max'      => 'El archivo no debe superar 5 MB.',
+        ]);
+
+        $resultado = $service->asignar($request->file('archivo'), $servicio);
+
+        return redirect()->route('servicios.show', $servicio)
+            ->with('resultado_asignacion', $resultado);
+    }
+
+    public function desasignarUsuario(Servicio $servicio, int $idUrs)
+    {
+        \DB::table('servicio_usuario')
+            ->where('id_servicio',         $servicio->id_servicio)
+            ->where('id_usuario_rol_sede',  $idUrs)
+            ->delete();
+
+        return back()->with('success', 'Usuario desvinculado del servicio.');
     }
 }

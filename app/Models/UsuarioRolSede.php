@@ -26,6 +26,11 @@ class UsuarioRolSede extends Model
         return $this->belongsTo(Periodo::class, 'id_periodo', 'id_periodo');
     }
 
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class, 'id_usuario', 'id_usuario');
+    }
+
     public function estudianteEgresado()
     {
         return $this->hasOne(EstudianteEgresado::class, 'id_usuario_rol_sede', 'id_usuario_rol_sede');

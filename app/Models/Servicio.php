@@ -41,4 +41,14 @@ class Servicio extends Model
     {
         return $this->belongsTo(Periodo::class, 'id_periodo', 'id_periodo');
     }
+
+    public function usuariosAsignados()
+    {
+        return $this->belongsToMany(
+            UsuarioRolSede::class,
+            'servicio_usuario',
+            'id_servicio',
+            'id_usuario_rol_sede'
+        )->with(['usuario', 'rol', 'sede']);
+    }
 }
