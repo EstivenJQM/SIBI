@@ -2,13 +2,13 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="mb-0">
-            <i class="bi bi-upload me-2 text-primary"></i>Carga Masiva de Usuarios
+            <i class="bi bi-upload me-2" style="color:#196844"></i>Carga Masiva de Usuarios
         </h2>
     </div>
 
     <div class="row">
         <div class="col-md-6">
-            <x-card title="Configurar carga" color="primary">
+            <x-card title="Configurar carga" color="sibi">
                 <form action="{{ route('usuarios.carga.store') }}" method="POST"
                       enctype="multipart/form-data" id="form-carga">
                     @csrf
@@ -118,7 +118,7 @@
                     {{-- Formato esperado --}}
                     <div class="alert alert-light border mb-3 d-none" id="formato-info">
                         <p class="small fw-semibold mb-1">
-                            <i class="bi bi-info-circle me-1 text-primary"></i>Columnas esperadas:
+                            <i class="bi bi-info-circle me-1" style="color:#196844"></i>Columnas esperadas:
                         </p>
                         <code class="small d-block text-wrap" style="font-size:.72rem">
                             DOCUMENTO ; NOMBRES ; APELLIDOS ; EMAIL ; SEDE ; NOMBRE DE LA SEDE ; PLAN ; PROGRAMA ACADEMICO ; FACULTAD
@@ -130,7 +130,7 @@
                         </p>
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100 d-none" id="btn-procesar">
+                    <button type="submit" class="btn btn-sibi w-100 d-none" id="btn-procesar">
                         <i class="bi bi-upload me-1"></i>
                         Procesar archivo — <span id="lbl-rol">Estudiante</span>
                     </button>
@@ -143,7 +143,7 @@
         @if(session('resultado'))
             @php $r = session('resultado'); @endphp
             <div class="col-md-6">
-                <x-card title="Resultado — {{ session('nombre_rol') }}" color="success">
+                <x-card title="Resultado — {{ session('nombre_rol') }}" color="sibi">
 
                     <div class="row text-center g-3 mb-3">
                         <div class="col-4">
@@ -154,7 +154,7 @@
                         </div>
                         <div class="col-4">
                             <div class="p-3 rounded bg-light">
-                                <div class="fs-2 fw-bold text-primary">{{ $r['actualizados'] }}</div>
+                                <div class="fs-2 fw-bold" style="color:#196844">{{ $r['actualizados'] }}</div>
                                 <div class="small text-muted">Actualizados</div>
                             </div>
                         </div>
@@ -195,6 +195,15 @@
         @endif
     </div>
 
+    <style>
+        .rol-card.sibi-selected,
+        .tipo-doc-card.sibi-selected {
+            background-color: #196844 !important;
+            border-color: #196844 !important;
+            color: #fff !important;
+        }
+    </style>
+
     <script>
         const rolCards       = document.querySelectorAll('.rol-card');
         const nombreRolInput = document.getElementById('nombre_rol');
@@ -208,14 +217,14 @@
 
         function seleccionarRol(rol, implementado) {
             rolCards.forEach(c => {
-                c.classList.remove('border-primary', 'bg-primary', 'text-white');
-                if (!c.dataset.implementado || c.dataset.implementado === '0') {
+                c.classList.remove('sibi-selected');
+                if (c.dataset.implementado === '0') {
                     c.classList.add('text-muted');
                 }
             });
 
             const card = document.querySelector(`.rol-card[data-rol="${rol}"]`);
-            card.classList.add('border-primary', 'bg-primary', 'text-white');
+            card.classList.add('sibi-selected');
             card.classList.remove('text-muted');
 
             nombreRolInput.value = rol;
@@ -244,8 +253,8 @@
 
         tipoDocCards.forEach(card => {
             card.addEventListener('click', () => {
-                tipoDocCards.forEach(c => c.classList.remove('border-primary', 'bg-primary', 'text-white'));
-                card.classList.add('border-primary', 'bg-primary', 'text-white');
+                tipoDocCards.forEach(c => c.classList.remove('sibi-selected'));
+                card.classList.add('sibi-selected');
             });
         });
 
