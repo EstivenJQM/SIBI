@@ -130,15 +130,11 @@
                                                         <input type="hidden" name="roles[{{ $urs->id_usuario_rol_sede }}][id_periodo]" value="{{ $urs->id_periodo }}">
                                                     </td>
                                                     <td class="align-middle text-center">
-                                                        <form action="{{ route('usuarios.roles.destroy', [$usuario, $urs]) }}"
-                                                              method="POST" class="d-inline"
-                                                              onsubmit="return confirm('¿Eliminar este rol del usuario?')">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-sm btn-danger" title="Eliminar rol">
-                                                                <i class="bi bi-trash-fill"></i>
-                                                            </button>
-                                                        </form>
+                                                        <button type="button" class="btn btn-sm btn-danger"
+                                                                title="Eliminar rol"
+                                                                onclick="eliminarRol('{{ route('usuarios.roles.destroy', [$usuario, $urs]) }}')">
+                                                            <i class="bi bi-trash-fill"></i>
+                                                        </button>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -159,5 +155,20 @@
 
         </div>
     </div>
+
+    {{-- Form reutilizable para eliminar roles (evita forms anidados) --}}
+    <form id="form-eliminar-rol" method="POST" style="display:none">
+        @csrf
+        @method('DELETE')
+    </form>
+
+    <script>
+        function eliminarRol(url) {
+            if (!confirm('¿Eliminar este rol del usuario?')) return;
+            const form = document.getElementById('form-eliminar-rol');
+            form.action = url;
+            form.submit();
+        }
+    </script>
 
 </x-layout>

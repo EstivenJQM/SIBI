@@ -5,23 +5,15 @@
         <h2 class="mb-0">
             <i class="bi bi-people-fill me-2" style="color:#196844"></i>Usuarios
         </h2>
-        <a href="{{ route('usuarios.index', array_merge(request()->except(['solo_estudiantes','page']), ['solo_estudiantes' => $soloEstudiantes ? 0 : 1])) }}"
-           class="btn {{ $soloEstudiantes ? 'btn-sibi' : 'btn-outline-sibi' }}">
-            <i class="bi bi-mortarboard{{ $soloEstudiantes ? '-fill' : '' }} me-1"></i>
-            {{ $soloEstudiantes ? 'Mostrando estudiantes — Ver todos' : 'Mostrar estudiantes' }}
-        </a>
     </div>
 
     {{-- ── Filtros ── --}}
     @php
         $filtrosActivos = array_filter(compact('idSede','idRol','idPeriodo','estado','busqueda'));
-        $hayFiltros     = $soloEstudiantes || count($filtrosActivos) > 0;
+        $hayFiltros     = count($filtrosActivos) > 0;
     @endphp
 
     <form method="GET" action="{{ route('usuarios.index') }}" class="mb-3">
-        @if($soloEstudiantes)
-            <input type="hidden" name="solo_estudiantes" value="1">
-        @endif
 
         {{-- Fila 1: búsqueda + botón limpiar --}}
         <div class="d-flex flex-wrap gap-2 align-items-end mb-2">
@@ -90,11 +82,6 @@
     {{-- Badges de filtros activos --}}
     @if($hayFiltros)
         <div class="d-flex flex-wrap gap-1 mb-2">
-            @if($soloEstudiantes)
-                <span class="badge" style="background-color:#196844">
-                    <i class="bi bi-mortarboard-fill me-1"></i>Solo estudiantes
-                </span>
-            @endif
             @if($busqueda)
                 <span class="badge bg-secondary">
                     <i class="bi bi-search me-1"></i>«{{ $busqueda }}»

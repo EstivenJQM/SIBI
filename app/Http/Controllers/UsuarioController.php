@@ -14,7 +14,6 @@ class UsuarioController extends Controller
 {
     public function index(Request $request)
     {
-        $soloEstudiantes = $request->boolean('solo_estudiantes');
         $busqueda        = trim($request->get('q', ''));
         $idSede          = $request->get('id_sede');
         $idRol           = $request->get('id_rol');
@@ -27,10 +26,6 @@ class UsuarioController extends Controller
             'rolesEnSedes.periodo',
             'rolesEnSedes.estudianteEgresado.planEstudio.programaSede.programa.facultad',
         ]);
-
-        if ($soloEstudiantes) {
-            $query->whereHas('rolesEnSedes.rol', fn($q) => $q->where('nombre', 'Estudiante'));
-        }
 
         if ($busqueda !== '') {
             $query->where(fn($q) => $q
@@ -70,7 +65,7 @@ class UsuarioController extends Controller
         $periodos = Periodo::orderByDesc('nombre')->get();
 
         return view('usuarios.index', compact(
-            'usuarios', 'soloEstudiantes', 'busqueda',
+            'usuarios', 'busqueda',
             'sedes', 'roles', 'periodos',
             'idSede', 'idRol', 'idPeriodo', 'estado'
         ));
