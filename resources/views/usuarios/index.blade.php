@@ -190,7 +190,7 @@
                         <div class="d-flex flex-column gap-1">
                             @foreach($urs as $entry)
                                 @php
-                                    $esEstudiante = $entry->rol?->nombre === 'Estudiante';
+                                    $esEstudiante = in_array($entry->rol?->nombre, ['Estudiante', 'Graduado']);
                                     $rolColor = match($entry->rol?->nombre) {
                                         'Estudiante' => '#196844',
                                         'Graduado'   => '#0d6efd',
