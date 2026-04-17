@@ -9,7 +9,16 @@ class PeriodoController extends Controller
 {
     public function index()
     {
-        $periodos = Periodo::orderByDesc('nombre')->get();
+        $periodos = Periodo::selectRaw("
+                periodo.*,
+                (SELECT COUNT(*) FROM servicio WHERE id_periodo = periodo.id_periodo) as servicios_count,
+                (SELECT COUNT(DISTINCT su.id_usuario_rol_sede)
+                 FROM servicio_usuario su
+                 INNER JOIN servicio s ON s.id_servicio = su.id_servicio
+                 WHERE s.id_periodo = periodo.id_periodo) as usuarios_servicios_count
+            ")
+            ->orderByDesc('nombre')
+            ->get();
 
         return view('periodos.index', compact('periodos'));
     }

@@ -15,4 +15,6 @@ class Periodo extends Model
     {
         return $this->hasMany(Servicio::class, 'id_periodo', 'id_periodo');
     }
+
+
 }
